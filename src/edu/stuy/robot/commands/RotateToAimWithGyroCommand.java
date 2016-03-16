@@ -46,7 +46,7 @@ public class RotateToAimWithGyroCommand extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        if (Robot.oi.operatorGamepad.getStartButton().get()) {
+        if (Robot.oi.driverGamepad.getStartButton().get()) {
             forceStopped = true;
             return;
         }
