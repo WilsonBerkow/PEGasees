@@ -33,7 +33,7 @@ public class MoveIntoShotRangeCommand extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        if (Robot.oi.driverGamepad.getStartButton().get()) {
+        if (Robot.oi.driverGamepad.getRightButton().get()) {
             forceStopped = true;
         }
         if (!forceStopped) {
