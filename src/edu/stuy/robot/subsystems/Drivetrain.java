@@ -33,11 +33,7 @@ public class Drivetrain extends Subsystem {
     private CANTalon leftRearMotor;
     private CANTalon rightRearMotor;
     private RobotDrive robotDrive;
-    private ADXRS450_Gyro gyro;
-    private PIDController pid;
     private TankDriveOutput out;
-    private Solenoid gearShift;
-    private double[] currents;
 
     public boolean gearUp; // Stores the state of the gear shift
     public boolean overrideAutoGearShifting; // True if automatic gear shifting
@@ -53,8 +49,8 @@ public class Drivetrain extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
     public Drivetrain() {
-        gearShift = new Solenoid(GEAR_SHIFT_CHANNEL);
-        currents = new double[10];
+        /*gearShift = new Solenoid(GEAR_SHIFT_CHANNEL);
+        currents = new double[10];*/
         leftFrontMotor = new CANTalon(FRONT_LEFT_MOTOR_CHANNEL);
         rightFrontMotor = new CANTalon(FRONT_RIGHT_MOTOR_CHANNEL);
         leftRearMotor = new CANTalon(REAR_LEFT_MOTOR_CHANNEL);
@@ -76,19 +72,19 @@ public class Drivetrain extends Subsystem {
         autoGearShiftingState = true;
 
         out = new TankDriveOutput(robotDrive);
-        gyro = new ADXRS450_Gyro();
-        pid = new PIDController(SmartDashboard.getNumber("Gyro P"),
-                SmartDashboard.getNumber("Gyro I"),
-                SmartDashboard.getNumber("Gyro D"), gyro, out);
-        drifts[0] = 0.0;
+        //gyro = new ADXRS450_Gyro();
+        //pid = new PIDController(SmartDashboard.getNumber("Gyro P"),
+        //        SmartDashboard.getNumber("Gyro I"),
+        //        SmartDashboard.getNumber("Gyro D"), gyro, out);
+        //drifts[0] = 0.0;
 
         // pid.setInputRange(0, 360);
         // pid.setContinuous();
         leftEncoder.setDistancePerPulse(DRIVETRAIN_ENCODER_INCHES_PER_PULSE);
         rightEncoder.setDistancePerPulse(DRIVETRAIN_ENCODER_INCHES_PER_PULSE);
-        gyro.reset();
-        gyro.setPIDSourceType(PIDSourceType.kDisplacement);
-        gyro.calibrate();
+        //gyro.reset();
+        //gyro.setPIDSourceType(PIDSourceType.kDisplacement);
+        //gyro.calibrate();
     }
 
     public void initDefaultCommand() {
@@ -147,45 +143,6 @@ public class Drivetrain extends Subsystem {
     }
 
     /**
-     * Changes from high gear to low gear or low gear to high gear automatically
-     * when the current spikes
-     * 
-     * @return Changes from high gear to low gear or low gear to high gear
-     *         automatically when the current spikes
-     */
-    public void autoGearShift() {
-        if (overrideAutoGearShifting) {
-            gearCounter = 0;
-            return;
-        }
-
-        if (gearCounter == 10) {
-            double sum = 0;
-            for (int i = 0; i < currents.length; i++) {
-                sum += currents[i];
-            }
-            gearUp = sum / currents.length > SmartDashboard
-                    .getNumber("Gear Shifting Threshold");
-            gearShift.set(gearUp);
-            gearCounter = 0;
-        } else {
-            currents[gearCounter] = getAverageCurrent();
-            gearCounter++;
-        }
-    }
-
-    /**
-     * Forces a gear shift, regardless of automatic gear shifting.
-     * 
-     * @param on
-     *            - True if low gear is desired. False if high gear is desired.
-     */
-    public void manualGearShift(boolean on) {
-        gearShift.set(on);
-        gearUp = on;
-    }
-
-    /**
      * @param input
      *            - The joystick value
      * @return input^2 if input is positive, -(input^2) if input is negative.
@@ -218,6 +175,6 @@ public class Drivetrain extends Subsystem {
     }
 
     public void resetGyro() {
-        gyro.reset();
+        //gyro.reset();
     }
 }
