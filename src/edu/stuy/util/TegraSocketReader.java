@@ -60,13 +60,14 @@ public class TegraSocketReader implements Runnable {
             connected = true;
             SmartDashboard.putString("ip connected to tegra by", ip);
         } catch (ConnectException e) {
-            System.out.println("Failed to connect to " + expectedTegraIP + ":" + tegraPort);
+            System.err.println("Failed to connect to " + expectedTegraIP + ":" + tegraPort);
+            System.err.println("Exception was: " + e + "\n\n");
         } catch (UnknownHostException e) {
-            System.out.println("Could not resolve host at " + expectedTegraIP + ":" + tegraPort);
+            System.err.println("Could not resolve host at " + expectedTegraIP + ":" + tegraPort);
         } catch (IOException e) {
-            System.out.println("An IOException has occurred. Message: " + e.getMessage());
+            System.err.println("An IOException has occurred. Message: " + e.getMessage());
         } catch (Exception e) {
-            System.out.println("Caught general exception in setupSocketAt: " + e);
+            System.err.println("Caught general exception in setupSocketAt: " + e);
         }
     }
 
