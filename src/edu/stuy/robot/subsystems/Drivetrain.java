@@ -41,16 +41,9 @@ public class Drivetrain extends Subsystem {
     public boolean autoGearShiftingState; // True if automatic gear shifting was
                                           // disabled and never re-enabled
 
-    private int gearCounter = 0;
-    private double[] drifts = new double[8];
-    private int counter = 0;
-    private double currentAngle = 0.0;
-
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
     public Drivetrain() {
-        /*gearShift = new Solenoid(GEAR_SHIFT_CHANNEL);
-        currents = new double[10];*/
         leftFrontMotor = new CANTalon(FRONT_LEFT_MOTOR_CHANNEL);
         rightFrontMotor = new CANTalon(FRONT_RIGHT_MOTOR_CHANNEL);
         leftRearMotor = new CANTalon(REAR_LEFT_MOTOR_CHANNEL);
@@ -67,16 +60,11 @@ public class Drivetrain extends Subsystem {
         leftEncoder = new Encoder(LEFT_ENCODER_CHANNEL_A,
                 LEFT_ENCODER_CHANNEL_B);
 
-        gearUp = false;
-        overrideAutoGearShifting = false;
-        autoGearShiftingState = true;
-
         out = new TankDriveOutput(robotDrive);
         //gyro = new ADXRS450_Gyro();
         //pid = new PIDController(SmartDashboard.getNumber("Gyro P"),
         //        SmartDashboard.getNumber("Gyro I"),
         //        SmartDashboard.getNumber("Gyro D"), gyro, out);
-        //drifts[0] = 0.0;
 
         // pid.setInputRange(0, 360);
         // pid.setContinuous();
