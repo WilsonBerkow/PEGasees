@@ -39,7 +39,6 @@ public class TegraSocketReader implements Runnable {
     public TegraSocketReader() {
         latestData = new AtomicReference<double[]>();
         latestData.set(null);
-        setupSocket();
     }
 
     /**
