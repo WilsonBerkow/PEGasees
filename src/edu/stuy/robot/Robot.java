@@ -61,8 +61,18 @@ public class Robot extends IterativeRobot {
             System.out.println("Added shutdown hook for Tegra thread interruption");
         } catch (Exception e) {
             // Let's hope it was near the end
-            System.out.println("AN EXCEPTION WAS CAUGHT IN robotInit: " + e);
+            System.out.println("AN EXCEPTION WAS CAUGHT IN robotInit: "
+                    + indentText(e.getStackTrace().toString(), "    "));
         }
+    }
+
+    private static String indentText(String txt, String indent) {
+        String[] lines = txt.split("\n");
+        String result = "";
+        for (String ln : lines) {
+            result += indent + ln.trim() + "\n";
+        }
+        return result;
     }
 
     private void startTegraReadingThread() {
@@ -94,7 +104,8 @@ public class Robot extends IterativeRobot {
         try {
             Scheduler.getInstance().run();
         } catch (Exception e) {
-            System.out.println("AN EXCEPTION WAS CAUGHT IN autonomousPeriodic: " + e);
+            System.out.println("AN EXCEPTION WAS CAUGHT IN autonomousPeriodic: "
+                    + indentText(e.getStackTrace().toString(), "    "));
         }
     }
 
@@ -109,7 +120,8 @@ public class Robot extends IterativeRobot {
             }
             Robot.drivetrain.resetEncoders();
         } catch (Exception e) {
-            System.out.println("AN EXCEPTION WAS CAUGHT IN teleopInit: " + e);
+            System.out.println("AN EXCEPTION WAS CAUGHT IN teleopInit: "
+                    + indentText(e.getStackTrace().toString(), "    "));
         }
     }
 
@@ -127,7 +139,8 @@ public class Robot extends IterativeRobot {
         try {
             Scheduler.getInstance().run();
         } catch (Exception e) {
-            System.out.println("AN EXCEPTION WAS CAUGHT IN teleopPeriodic: " + e);
+            System.out.println("AN EXCEPTION WAS CAUGHT IN teleopPeriodic: "
+                    + indentText(e.getStackTrace().toString(), "    "));
         }
     }
 
