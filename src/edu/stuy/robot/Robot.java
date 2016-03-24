@@ -102,6 +102,8 @@ public class Robot extends IterativeRobot {
     }
 
     public void autonomousInit() {
+        // Set up Thread to connect to and read from Tegra
+        ensureTegraThreadRunning();
     }
 
     public void autonomousPeriodic() {
