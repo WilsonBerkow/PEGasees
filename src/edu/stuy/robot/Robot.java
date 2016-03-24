@@ -47,6 +47,7 @@ public class Robot extends IterativeRobot {
                     }
                 }
             });
+            System.out.println("Added shutdown hook for Tegra thread interruption");
         } catch (Exception e) {
             // Let's hope it was near the end
             System.out.println("AN EXCEPTION WAS CAUGHT IN robotInit: "
@@ -125,7 +126,6 @@ public class Robot extends IterativeRobot {
 
             // Set up Tegra reading thread
             ensureTegraThreadRunning();
-            System.out.println("Added shutdown hook for Tegra thread interruption");//*/
 //        } catch (Exception e) {
 //            System.out.println("AN EXCEPTION WAS CAUGHT IN teleopInit: ");
 //            e.printStackTrace();
