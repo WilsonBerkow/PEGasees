@@ -1,18 +1,11 @@
 package edu.stuy.robot;
 
-import static edu.stuy.robot.RobotMap.JONAH_ID;
-import static edu.stuy.robot.RobotMap.SHOOTER_SPEED_LABEL;
-import static edu.stuy.robot.RobotMap.YUBIN_ID;
-
 import edu.stuy.robot.subsystems.Drivetrain;
-import edu.stuy.util.BlueSignalLight;
 import edu.stuy.util.TegraSocketReader;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -42,13 +35,13 @@ public class Robot extends IterativeRobot {
      */
     public void robotInit() {
         try {
-        drivetrain = new Drivetrain();
-        oi = new OI();
-        SmartDashboard.putNumber("maxCV", 1.0);
-        SmartDashboard.putNumber("minCV", 0.5);
-        SmartDashboard.putBoolean("printTegraData", false);
-        //dontStartCommands = false;
-        //drivetrain.setDrivetrainBrakeMode(true);
+            drivetrain = new Drivetrain();
+            oi = new OI();
+            SmartDashboard.putNumber("maxCV", 1.0);
+            SmartDashboard.putNumber("minCV", 0.5);
+            SmartDashboard.putBoolean("printTegraData", false);
+            //dontStartCommands = false;
+            //drivetrain.setDrivetrainBrakeMode(true);
         } catch (Exception e) {
             // Let's hope it was near the end
             System.out.println("AN EXCEPTION WAS CAUGHT IN robotInit: "
@@ -65,8 +58,10 @@ public class Robot extends IterativeRobot {
         return result;
     }
 
-    private void startTegraReadingThread() {
-        if (tegraReader != null || tegraThread != null) return;
+    private void ensureTegraBeingRead() {
+        if (tegraThread != null) {
+            return;
+        }
         System.out.println("Initializing a TegraSocketReader");
         tegraReader = new TegraSocketReader();
         System.out.println("Setting up thread");
@@ -74,6 +69,14 @@ public class Robot extends IterativeRobot {
         // Call .start(), rather than .run(), to run it in a separate thread
         tegraThread.start();
         System.out.println("Done!");
+    }
+
+    private void dontReadFromTegra() {
+        if (tegraThread != null && tegraThread.isAlive()) {
+            tegraThread.interrupt();
+        }
+        tegraReader = null;
+        tegraThread = null;
     }
 
     public static double[] getLatestTegraVector() {
@@ -116,7 +119,7 @@ public class Robot extends IterativeRobot {
             Robot.drivetrain.resetEncoders();
 
             // Set up Tegra reading thread
-            startTegraReadingThread();
+            ensureTegraBeingRead();
             Runtime.getRuntime().addShutdownHook(new Thread() {
                 @Override
                 public void run() {
@@ -139,11 +142,7 @@ public class Robot extends IterativeRobot {
      * to reset subsystems before shutting down.
      */
     public void disabledInit() {
-        if (tegraThread != null && tegraThread.isAlive()) {
-            tegraThread.interrupt();
-        }
-        tegraThread = null;
-        tegraReader = null;
+        dontReadFromTegra();
     }
 
     /**
