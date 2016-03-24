@@ -38,7 +38,12 @@ public class TegraSocketReader implements Runnable {
 
     public TegraSocketReader() {
         latestData = new AtomicReference<double[]>();
-        latestData.set(null);
+        setVal(null);
+    }
+
+    private void setVal(double[] val) {
+        System.out.println("SETTING TEGRA READ DATA TO: " + (val == null ? "null" : Arrays.toString(val)));
+        latestData.set(val);
     }
 
     /**
@@ -65,10 +70,13 @@ public class TegraSocketReader implements Runnable {
             tegra = new Socket();
             tegra.connect(new InetSocketAddress(ip, tegraPort), 1000);
 
-            // Set a timeout on Socket IO for when we read data
-            tegra.setSoTimeout(1000);
-
-            connected = true;
+            if (tegra.isConnected()) {
+                connected = true;
+                // Set a timeout on Socket IO for when we read data
+                tegra.setSoTimeout(1000);
+            } else {
+                tegra = null;
+            }
         } catch (ConnectException e) {
             System.err.println("Failed to connect to " + tegraIP + ":" + tegraPort);
             System.err.println("Exception was: " + e + "\n\n");
@@ -91,7 +99,7 @@ public class TegraSocketReader implements Runnable {
     @Override
     public void run() {
         // Ensure tegra is connected to
-        while (tegra == null) {
+        while (tegra == null || (tegra != null && !tegra.isConnected())) {
             setupSocket();
         }
         // The following while loop is for trying again and again when
@@ -107,8 +115,10 @@ public class TegraSocketReader implements Runnable {
                     while (!isInterrupted()) {
                         // The .readLine() call will timeout after time specified in setupSocketAt
                         double[] msg = parseMessage(bufIn.readLine());
-                        latestData.set(msg);
-                        System.out.println("Read data from Tegra: " + Arrays.toString(msg));
+                        setVal(msg);
+                        if (SmartDashboard.getBoolean("printTegraData")) {
+                            System.out.println("Read data from Tegra: " + Arrays.toString(msg));
+                        }
                     }
                 } finally {
                     bufIn.close();

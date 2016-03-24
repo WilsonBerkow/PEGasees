@@ -3,24 +3,19 @@ package edu.stuy.robot.subsystems;
 import static edu.stuy.robot.RobotMap.DRIVETRAIN_ENCODER_INCHES_PER_PULSE;
 import static edu.stuy.robot.RobotMap.FRONT_LEFT_MOTOR_CHANNEL;
 import static edu.stuy.robot.RobotMap.FRONT_RIGHT_MOTOR_CHANNEL;
-import static edu.stuy.robot.RobotMap.GEAR_SHIFT_CHANNEL;
 import static edu.stuy.robot.RobotMap.LEFT_ENCODER_CHANNEL_A;
 import static edu.stuy.robot.RobotMap.LEFT_ENCODER_CHANNEL_B;
 import static edu.stuy.robot.RobotMap.REAR_LEFT_MOTOR_CHANNEL;
 import static edu.stuy.robot.RobotMap.REAR_RIGHT_MOTOR_CHANNEL;
 import static edu.stuy.robot.RobotMap.RIGHT_ENCODER_CHANNEL_A;
 import static edu.stuy.robot.RobotMap.RIGHT_ENCODER_CHANNEL_B;
+
 import edu.stuy.robot.commands.DrivetrainTankDriveCommand;
 import edu.stuy.util.TankDriveOutput;
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -122,8 +117,8 @@ public class Drivetrain extends Subsystem {
     }
 
     public void resetEncoders() {
-        leftEncoder.reset();
-        rightEncoder.reset();
+        //leftEncoder.reset();
+        //rightEncoder.reset();
     }
 
     public void stop() {

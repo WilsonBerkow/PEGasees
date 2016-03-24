@@ -41,10 +41,15 @@ public class OI {
     public Gamepad driverGamepad;
 
     public OI() {
-        driverGamepad = new Gamepad(DRIVER_GAMEPAD);
+        try {
+            driverGamepad = new Gamepad(DRIVER_GAMEPAD);
 
-        // DRIVER BINDINGS
-        driverGamepad.getBottomButton().whenPressed(new RotateToGoalCommand());
-        driverGamepad.getLeftButton().whenPressed(new MoveIntoShotRangeCommand());
+            // DRIVER BINDINGS
+            driverGamepad.getBottomButton().whenPressed(new RotateToGoalCommand());
+            driverGamepad.getLeftButton().whenPressed(new MoveIntoShotRangeCommand());
+        } catch (Exception e) {
+            // If the gamepad is not connected...
+            System.out.println("ERROR BINDING OI");
+        }
     }
 }

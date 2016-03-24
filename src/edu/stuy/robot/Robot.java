@@ -27,7 +27,7 @@ public class Robot extends IterativeRobot {
     public static Drivetrain drivetrain;
     public static OI oi;
 
-    public static BlueSignalLight cvSignalLight;
+    //public static BlueSignalLight cvSignalLight;
 
     Command autonomousCommand;
 
@@ -41,24 +41,14 @@ public class Robot extends IterativeRobot {
      * used for any initialization code.
      */
     public void robotInit() {
+        try {
         drivetrain = new Drivetrain();
         oi = new OI();
-        dontStartCommands = false;
-        drivetrain.setDrivetrainBrakeMode(true);
-
-
-        try {
-            // Set up Tegra reading thread
-            startTegraReadingThread();
-            Runtime.getRuntime().addShutdownHook(new Thread() {
-                @Override
-                public void run() {
-                    if (tegraThread != null && tegraThread.isAlive()) {
-                        tegraThread.interrupt();
-                    }
-                }
-            });
-            System.out.println("Added shutdown hook for Tegra thread interruption");
+        SmartDashboard.putNumber("maxCV", 1.0);
+        SmartDashboard.putNumber("minCV", 0.4);
+        SmartDashboard.putBoolean("printTegraData", false);
+        //dontStartCommands = false;
+        //drivetrain.setDrivetrainBrakeMode(true);
         } catch (Exception e) {
             // Let's hope it was near the end
             System.out.println("AN EXCEPTION WAS CAUGHT IN robotInit: "
@@ -76,6 +66,7 @@ public class Robot extends IterativeRobot {
     }
 
     private void startTegraReadingThread() {
+        if (tegraReader != null || tegraThread != null) return;
         System.out.println("Initializing a TegraSocketReader");
         tegraReader = new TegraSocketReader();
         System.out.println("Setting up thread");
@@ -86,11 +77,15 @@ public class Robot extends IterativeRobot {
     }
 
     public static double[] getLatestTegraVector() {
+        if (tegraReader == null) {
+            System.out.println("TEGRAREADER IS NULL, THOUGH DATA WAS REQUESTED");
+            return null;
+        }
         return tegraReader.getMostRecent();
     }
 
     public static boolean tegraIsConnected() {
-        return tegraReader.isConnected();
+        return tegraReader != null && tegraReader.isConnected();
     }
 
     public void disabledPeriodic() {
@@ -110,7 +105,7 @@ public class Robot extends IterativeRobot {
     }
 
     public void teleopInit() {
-        try {
+//        try {
             // This makes sure that the autonomous stops running when
             // teleop starts running. If you want the autonomous to
             // continue until interrupted by another command, remove
@@ -119,10 +114,24 @@ public class Robot extends IterativeRobot {
                 autonomousCommand.cancel();
             }
             Robot.drivetrain.resetEncoders();
-        } catch (Exception e) {
-            System.out.println("AN EXCEPTION WAS CAUGHT IN teleopInit: "
-                    + indentText(e.getStackTrace().toString(), "    "));
-        }
+
+            // Set up Tegra reading thread
+            startTegraReadingThread();
+            Runtime.getRuntime().addShutdownHook(new Thread() {
+                @Override
+                public void run() {
+                    if (tegraThread != null && tegraThread.isAlive()) {
+                        tegraThread.interrupt();
+                    }
+                }
+            });
+            System.out.println("Added shutdown hook for Tegra thread interruption");//*/
+//        } catch (Exception e) {
+//            System.out.println("AN EXCEPTION WAS CAUGHT IN teleopInit: ");
+//            e.printStackTrace();
+//            System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+//            //        + indentText(e.toString() + e.fillInStackTrace(), "    "));
+//        }
     }
 
     /**
@@ -130,18 +139,24 @@ public class Robot extends IterativeRobot {
      * to reset subsystems before shutting down.
      */
     public void disabledInit() {
+        if (tegraThread != null && tegraThread.isAlive()) {
+            tegraThread.interrupt();
+        }
+        tegraThread = null;
+        tegraReader = null;
     }
 
     /**
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-        try {
+//        try {
             Scheduler.getInstance().run();
-        } catch (Exception e) {
-            System.out.println("AN EXCEPTION WAS CAUGHT IN teleopPeriodic: "
-                    + indentText(e.getStackTrace().toString(), "    "));
-        }
+//        } catch (Exception e) {
+//            System.out.println("AN EXCEPTION WAS CAUGHT IN teleopPeriodic: ");
+//            e.printStackTrace();
+//            System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+//        }
     }
 
     /**

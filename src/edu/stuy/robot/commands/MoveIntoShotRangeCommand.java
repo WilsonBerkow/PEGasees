@@ -55,6 +55,7 @@ public class MoveIntoShotRangeCommand extends Command {
             // Set wheelSpeed to ratio of how much off to how much could possibly be off
             double wheelSpeed = offsetFromIdeal / (CAMERA_FRAME_PX_HEIGHT / 2 + IDEAL_VERTICAL_OFFSET_AUTO_AIMING);
             SmartDashboard.putNumber("CV| wheelSpeed to use", wheelSpeed);
+            System.out.println("MISRC: speed to use: " + wheelSpeed);
             Robot.drivetrain.tankDrive(wheelSpeed, wheelSpeed);
         }
     }

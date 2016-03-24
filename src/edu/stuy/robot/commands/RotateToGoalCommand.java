@@ -31,6 +31,7 @@ public class RotateToGoalCommand extends Command {
     @Override
     protected void initialize() {
         goalInFrame = true; // Assume it is there until we see otherwise
+        forceStopped = false;
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -38,6 +39,7 @@ public class RotateToGoalCommand extends Command {
     protected void execute() {
         if (Robot.oi.driverGamepad.getRightButton().get()) {
             forceStopped = true;
+            System.out.println("Force stopped by driver");
         }
         if (!forceStopped) {
             currentReading = Robot.getLatestTegraVector();
@@ -50,14 +52,20 @@ public class RotateToGoalCommand extends Command {
             SmartDashboard.putNumber("CV| vector Y", currentReading[1]);
             SmartDashboard.putNumber("CV| bounding rect angle", currentReading[2]);
             double degsOff = pxOffsetToDegrees(currentReading[0]);
-            double rightWheelSpeed = clampWithinOne(-degsOff / (CAMERA_FRAME_PX_WIDTH / 2) * 50);
-            rightWheelSpeed = Math.signum(rightWheelSpeed) * 0.3;
+            double rightWheelSpeed = clampMagnitude(degsOff / (CAMERA_FRAME_PX_WIDTH / 2) * 50, SmartDashboard.getNumber("minCV"), SmartDashboard.getNumber("maxCV"));
+            //rightWheelSpeed = Math.signum(rightWheelSpeed) * 0.7;
             // Try with the following modification, or similar ones:
             // rightWheelSpeed = Math.signum(rightWheelSpeed) * Math.pow(rightWheelSpeed, 2);
             SmartDashboard.putNumber("CV| rightWheelSpeed to use", rightWheelSpeed);
 
+            System.out.println("Moving with rwspeed: " + rightWheelSpeed);
             Robot.drivetrain.tankDrive(-rightWheelSpeed, rightWheelSpeed);
         }
+    }
+
+    private double clampMagnitude(double x, double minMag, double maxMag) {
+        // minMag and maxMag better be nonnegative
+        return Math.signum(x) * Math.min(maxMag, Math.max(minMag, Math.abs(x)));
     }
 
     private double clampWithinOne(double x) {
@@ -78,7 +86,7 @@ public class RotateToGoalCommand extends Command {
     @Override
     protected void end() {
         Robot.drivetrain.tankDrive(0.0, 0.0);
-        Robot.cvSignalLight.set(goalInFrame);
+        //Robot.cvSignalLight.set(goalInFrame);
     }
 
     // Called when another command which requires one or more of the same

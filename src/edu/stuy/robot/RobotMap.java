@@ -18,42 +18,11 @@ public interface RobotMap extends PhysicalConstants {
     int FRONT_RIGHT_MOTOR_CHANNEL = 3;
     int REAR_RIGHT_MOTOR_CHANNEL = 4;
 
-    // CANTalon channels for other subsystems
-    int HOPPER_MOTOR_CHANNEL = 5;
-    int ACQUIRER_MOTOR_CHANNEL = 6;
-    int SHOOTER_MOTOR_CHANNEL = 7;
-    int DROPDOWN_MOTOR_CHANNEL = 8;
-
-    // Solenoid ports
-    int HOOD_SOLENOID_CHANNEL = 6;
-    int GEAR_SHIFT_CHANNEL = 3;
-
-    // Tuneable threshold for current (used in gear shifting for drivetrain)
-    int GEAR_SHIFT_THRESHOLD = 40;
-
-    // DropDown Constants
-    double DROP_DOWN_DEADBAND = 0.01;
-
-    // Hood Constants
-    boolean HOOD_UP_POSITION = false;
-    boolean HOOD_DOWN_POSITION = true;
-
-    // Hopper Constants
-    double HOPPER_SENSOR_THRESHOLD = 1.0;
-
     // Digital IO Ports
-    int LEFT_ENCODER_CHANNEL_A = 0;
-    int LEFT_ENCODER_CHANNEL_B = 1;
-    int RIGHT_ENCODER_CHANNEL_A = 2;
-    int RIGHT_ENCODER_CHANNEL_B = 3;
-    int SHOOTER_ENCODER_A_CHANNEL = 4;
-    int SHOOTER_ENCODER_B_CHANNEL = 5;
-    int LIMIT_SWITCH_CHANNEL = 6;
-    int FLASHLIGHT_CHANNEL = 7;
-
-    // Analog ports
-    int ACQUIRER_POTENTIOMETER_CHANNEL = 0;
-    int HOPPER_SENSOR_CHANNEL = 3;
+    int LEFT_ENCODER_CHANNEL_A = 2;
+    int LEFT_ENCODER_CHANNEL_B = 3;
+    int RIGHT_ENCODER_CHANNEL_A = 0;
+    int RIGHT_ENCODER_CHANNEL_B = 1;
 
     // Potentiometer
     double INITIAL_VOLTAGE = 287.5; // Equal to 0 degrees
