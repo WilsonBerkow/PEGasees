@@ -39,6 +39,14 @@ public class Robot extends IterativeRobot {
             SmartDashboard.putNumber("minCV", 0.5);
             SmartDashboard.putBoolean("printTegraData", false);
             drivetrain.setDrivetrainBrakeMode(true);
+            Runtime.getRuntime().addShutdownHook(new Thread() {
+                @Override
+                public void run() {
+                    if (tegraThread != null && tegraThread.isAlive()) {
+                        tegraThread.interrupt();
+                    }
+                }
+            });
         } catch (Exception e) {
             // Let's hope it was near the end
             System.out.println("AN EXCEPTION WAS CAUGHT IN robotInit: "
@@ -117,14 +125,6 @@ public class Robot extends IterativeRobot {
 
             // Set up Tegra reading thread
             ensureTegraBeingRead();
-            Runtime.getRuntime().addShutdownHook(new Thread() {
-                @Override
-                public void run() {
-                    if (tegraThread != null && tegraThread.isAlive()) {
-                        tegraThread.interrupt();
-                    }
-                }
-            });
             System.out.println("Added shutdown hook for Tegra thread interruption");//*/
 //        } catch (Exception e) {
 //            System.out.println("AN EXCEPTION WAS CAUGHT IN teleopInit: ");
