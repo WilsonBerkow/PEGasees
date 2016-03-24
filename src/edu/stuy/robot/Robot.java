@@ -45,7 +45,7 @@ public class Robot extends IterativeRobot {
         drivetrain = new Drivetrain();
         oi = new OI();
         SmartDashboard.putNumber("maxCV", 1.0);
-        SmartDashboard.putNumber("minCV", 0.4);
+        SmartDashboard.putNumber("minCV", 0.5);
         SmartDashboard.putBoolean("printTegraData", false);
         //dontStartCommands = false;
         //drivetrain.setDrivetrainBrakeMode(true);
