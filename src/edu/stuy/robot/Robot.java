@@ -38,7 +38,7 @@ public class Robot extends IterativeRobot {
             SmartDashboard.putNumber("maxCV", 1.0);
             SmartDashboard.putNumber("minCV", 0.5);
             SmartDashboard.putBoolean("printTegraData", false);
-            //drivetrain.setDrivetrainBrakeMode(true);
+            drivetrain.setDrivetrainBrakeMode(true);
         } catch (Exception e) {
             // Let's hope it was near the end
             System.out.println("AN EXCEPTION WAS CAUGHT IN robotInit: "
