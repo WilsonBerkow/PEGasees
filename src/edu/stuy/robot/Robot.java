@@ -24,8 +24,6 @@ public class Robot extends IterativeRobot {
 
     Command autonomousCommand;
 
-    public static boolean dontStartCommands;
-
     private static TegraSocketReader tegraReader;
     private static Thread tegraThread;
 
@@ -40,7 +38,6 @@ public class Robot extends IterativeRobot {
             SmartDashboard.putNumber("maxCV", 1.0);
             SmartDashboard.putNumber("minCV", 0.5);
             SmartDashboard.putBoolean("printTegraData", false);
-            //dontStartCommands = false;
             //drivetrain.setDrivetrainBrakeMode(true);
         } catch (Exception e) {
             // Let's hope it was near the end
