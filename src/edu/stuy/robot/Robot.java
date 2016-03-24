@@ -63,7 +63,7 @@ public class Robot extends IterativeRobot {
         return result;
     }
 
-    private void ensureTegraBeingRead() {
+    private void ensureTegraThreadRunning() {
         if (tegraThread != null) {
             return;
         }
@@ -124,7 +124,7 @@ public class Robot extends IterativeRobot {
             Robot.drivetrain.resetEncoders();
 
             // Set up Tegra reading thread
-            ensureTegraBeingRead();
+            ensureTegraThreadRunning();
             System.out.println("Added shutdown hook for Tegra thread interruption");//*/
 //        } catch (Exception e) {
 //            System.out.println("AN EXCEPTION WAS CAUGHT IN teleopInit: ");
